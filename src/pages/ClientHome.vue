@@ -6,41 +6,51 @@
     </div>
 
     <div class="dashboard-cards">
-      <div class="card">
-        <h3>Mening Buyurtmalarim</h3>
+      <BaseCard
+        title="Mening Buyurtmalarim"
+        subtitle="Jami buyurtmalar soni"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ clientStore.stats.totalOrders }}
         </div>
-        <p>Jami buyurtmalar soni</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Faol Buyurtmalar</h3>
+      <BaseCard
+        title="Faol Buyurtmalar"
+        subtitle="Hozirda faol buyurtmalar"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ clientStore.stats.activeOrders }}
         </div>
-        <p>Hozirda faol buyurtmalar</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Jami Xaridlar</h3>
+      <BaseCard
+        title="Jami Xaridlar"
+        subtitle="Jami sarflangan mablag'"
+        class="stats-card"
+      >
         <div class="card-number">
           ${{ clientStore.stats.totalSpent }}
         </div>
-        <p>Jami sarflangan mablag'</p>
-      </div>
+      </BaseCard>
       
-      <div class="card">
-        <h3>Bonuslar</h3>
+      <BaseCard
+        title="Bonuslar"
+        subtitle="To'plangan bonus ballari"
+        class="stats-card"
+      >
         <div class="card-number">
           {{ clientStore.stats.bonusPoints }}
         </div>
-        <p>To'plangan bonus ballari</p>
-      </div>
+      </BaseCard>
     </div>
 
-    <div class="recent-activity">
-      <h2>So'nggi Faoliyat</h2>
+    <BaseCard
+      title="So'nggi Faoliyat"
+      class="recent-activity-card"
+    >
       <div class="activity-list">
         <div
           v-for="activity in clientStore.recentActivities"
@@ -57,43 +67,64 @@
           </div>
         </div>
       </div>
-    </div>
+    </BaseCard>
 
     <div class="quick-actions">
       <h2>Tezkor Amallar</h2>
       <div class="actions-grid">
-        <router-link
-          to="/client/orders"
-          class="action-card"
-        >
-          <div class="action-icon">
-            🛒
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="primary"
+              label="Yangi Buyurtma"
+              @click="router.push('/client/orders')"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              🛒
+            </div>
+            <h3>Yangi Buyurtma</h3>
+            <p>Yangi buyurtma berish</p>
           </div>
-          <h3>Yangi Buyurtma</h3>
-          <p>Yangi buyurtma berish</p>
-        </router-link>
+        </BaseCard>
         
-        <router-link
-          to="/client/profile"
-          class="action-card"
-        >
-          <div class="action-icon">
-            👤
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="secondary"
+              label="Profilni Ko'rish"
+              @click="router.push('/client/profile')"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              👤
+            </div>
+            <h3>Profil</h3>
+            <p>Profil ma'lumotlarini ko'rish</p>
           </div>
-          <h3>Profil</h3>
-          <p>Profil ma'lumotlarini ko'rish</p>
-        </router-link>
+        </BaseCard>
         
-        <router-link
-          to="/client/support"
-          class="action-card"
-        >
-          <div class="action-icon">
-            💬
+        <BaseCard class="action-card-wrapper">
+          <template #actions>
+            <BaseButton
+              class="full-width"
+              color="accent"
+              label="Yordam Olish"
+              @click="router.push('/client/support')"
+            />
+          </template>
+          <div class="action-content">
+            <div class="action-icon">
+              💬
+            </div>
+            <h3>Yordam</h3>
+            <p>Qo'llab-quvvatlash xizmati</p>
           </div>
-          <h3>Yordam</h3>
-          <p>Qo'llab-quvvatlash xizmati</p>
-        </router-link>
+        </BaseCard>
       </div>
     </div>
   </div>
@@ -101,8 +132,11 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { BaseCard, BaseButton } from '@apps/shared'
 import { useClientStore } from '../stores'
 
+const router = useRouter()
 const clientStore = useClientStore()
 
 onMounted(() => {
@@ -152,51 +186,25 @@ const formatDate = (date: Date) => {
   margin-bottom: 3rem;
 }
 
-.card {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.stats-card {
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.card:hover {
+.stats-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.card h3 {
-  color: #374151;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
 }
 
 .card-number {
   font-size: 2.5rem;
   font-weight: 700;
   color: #667eea;
-  margin-bottom: 0.5rem;
+  margin: 1rem 0;
 }
 
-.card p {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.recent-activity {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.recent-activity-card {
   margin-bottom: 3rem;
-}
-
-.recent-activity h2 {
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid #f3f4f6;
-  padding-bottom: 0.5rem;
 }
 
 .activity-list {
@@ -260,20 +268,18 @@ const formatDate = (date: Date) => {
   gap: 1.5rem;
 }
 
-.action-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-decoration: none;
-  text-align: center;
+.action-card-wrapper {
   transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
-.action-card:hover {
+.action-card-wrapper:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.action-content {
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .action-icon {
@@ -281,13 +287,18 @@ const formatDate = (date: Date) => {
   margin-bottom: 1rem;
 }
 
-.action-card h3 {
+.action-content h3 {
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
+  color: #1f2937;
 }
 
-.action-card p {
-  opacity: 0.9;
+.action-content p {
+  color: #6b7280;
   font-size: 0.9rem;
+}
+
+.full-width {
+  width: 100%;
 }
 </style>
